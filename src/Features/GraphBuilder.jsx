@@ -12,7 +12,9 @@ const useStyles = makeStyles((theme) => ({
     svg: {
         width: "100%",
         height: "100%",
-        border: `1px solid ${theme.palette.primary.main}`
+        //border: `1px solid ${theme.palette.text.secondary}`,
+        borderBottom: `2px solid ${theme.palette.text.secondary}`,
+        borderLeft: `2px solid ${theme.palette.text.secondary}`
     },
     path: {
         strokeWidth: 2,
@@ -38,7 +40,7 @@ export default function GraphBuilder() {
     const [param, setParam] = useState(0);
 
     const [dataPoints, setDataPoints] = useState(() => {
-        const data = [[30, 20], [40, 24]];
+        const data = [[30, 17], [40, 24], [60, 30], [50, 27], [75, 35], [90, 50], [120, 60]];
 
         return data;
     });
@@ -69,7 +71,7 @@ export default function GraphBuilder() {
         let d = "";
 
         const y = (x) => {
-            return (parseInt(coeff) * x) + parseInt(param);
+            return (parseFloat(coeff) * x) + parseFloat(param);
         };
 
         for(let x = 0; x < 1000; x++) {
@@ -108,7 +110,7 @@ export default function GraphBuilder() {
                         multiline
                         onChange={e => handleChange(e.target.value)}
                         value={coordinates}
-                        rows={8}
+                        rows={3}
                         fullWidth
                         variant="outlined"
                     />
@@ -157,10 +159,6 @@ export default function GraphBuilder() {
                 <Box my={2}>
                     <Button variant="contained" color="primary" onClick={e => drawFn(coeff, param)}>Draw fn</Button>
                 </Box>
-
-                {/* <Box>
-                    <Typography variant="caption">{d.toString()}</Typography>
-                </Box> */}
             </Grid>
 
             <Grid item xs={8}>
