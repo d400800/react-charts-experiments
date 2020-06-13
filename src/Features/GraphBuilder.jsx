@@ -99,6 +99,36 @@ export default function GraphBuilder() {
         })
     }
 
+    function calcCostFnResult(data, hypothesisFn, param1) {
+        let sum = 0;
+
+        for (const [x, y] of data) {
+
+            sum += Math.pow((hypothesisFn(param1, x) - y), 2);
+        }
+
+        return (1 / 2 * data.length) * sum;
+    }
+
+    function findConstFunction(data) {
+        let results = {};
+
+        for (let i = 0; i < 1; i = i + 0.025) {
+            
+            const hypothesisFn = (i, x) => i * x;
+
+            const result = calcCostFnResult(data, hypothesisFn, i);
+            
+            results[result] = i;
+        }
+        
+        const minimum = Math.min(...Object.keys(results));
+
+        console.log(results[minimum]);
+
+        setCoeff(Math.round(results[minimum] * 1000) / 1000);
+    }
+
     return (
         <Grid container spacing={4}>
             <Grid item xs={4}>
@@ -152,12 +182,18 @@ export default function GraphBuilder() {
                             />  
                         </Grid>
                     </Grid>
-
-                </Box> 
+                </Box>
                 
-
                 <Box my={2}>
                     <Button variant="contained" color="primary" onClick={e => drawFn(coeff, param)}>Draw fn</Button>
+                </Box>
+
+                <Box my={2}>
+                    <Divider/>
+                </Box>
+
+                <Box my={2}>
+                    <Button variant="contained" color="primary" onClick={e => findConstFunction(dataPoints)}>Find cost function</Button>
                 </Box>
             </Grid>
 
