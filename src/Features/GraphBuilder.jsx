@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     svg: {
         width: "100%",
         height: "100%",
-        //border: `1px solid ${theme.palette.text.secondary}`,
         borderBottom: `2px solid ${theme.palette.text.secondary}`,
         borderLeft: `2px solid ${theme.palette.text.secondary}`
     },
@@ -29,42 +28,31 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const dataSet = [
+    [28, 16], [29, 20], [25, 14], [25, 22], [21, 12],
+    [30, 17], [33, 16], [35, 17], [38, 22], [39, 25],
+    [40, 24], [45, 25], [49, 29], [43, 33], [41, 37],
+    [50, 27], [55, 30], [56, 33], [58, 40], [59, 35],
+    [75, 35], [70, 36], [78, 39], [76, 29], [77, 45],
+    [90, 50], [92, 55], [95, 50], [99, 60], [94, 70],
+    [100, 65],
+    [120, 60],
+].map(p => {
+    return [p[0] * 2, p[1] * 4]
+})
+
 export default function GraphBuilder() {
     const graphH = 300;
     const classes = useStyles();
 
-    const [coordinates, setCoordinates] = useState("50,50");
     const [d, setD] = useState("");
 
     const [coeff, setCoeff] = useState(1);
     const [param, setParam] = useState(0);
 
-    const [dataPoints, setDataPoints] = useState(() => {
-        const data = [[30, 17], [40, 24], [60, 30], [50, 27], [75, 35], [90, 50], [120, 60]];
+    const [data, setData] = useState(dataSet);
 
-        return data;
-    });
-
-    function drawGraph(coordinates) {
-        let d = "";
-
-        const cArr = coordinates
-            .split(" ").join("")
-            .split("|");
-        
-        for (const cPair of cArr) {
-            const cPairArr = cPair.split(",");
-
-            d += `L ${cPairArr[0] || 0} ${graphH - (parseInt(cPairArr[1]) || 0)} `
-        }
-
-        setD(d);
-    }
-
-    function handleChange(coordinates) {
-        setCoordinates(coordinates);
-        drawGraph(coordinates);
-    }
+    const [dataString, setDataString] = useState(() => dataToString(dataSet))
 
     function drawFn(coeff, param) {
         // example: y = 2x + 1;
@@ -89,12 +77,12 @@ export default function GraphBuilder() {
         setParam(param);
     }
 
-    function drawDataPoints(dataPoints) {
-        return dataPoints.map((datum, i) => {
+    function drawDataPoints(data) {
+        return data.map((datum, i) => {
             const [x, y] = datum;
 
             return (
-                <circle key={i} className={classes.dataPoint} cx={x} cy={graphH - y} r="3"></circle>
+                <circle key={i} className={classes.dataPoint} cx={x} cy={graphH - y} r="1.5"></circle>
             );
         })
     }
@@ -110,7 +98,7 @@ export default function GraphBuilder() {
         return (1 / 2 * data.length) * sum;
     }
 
-    function findConstFunction(data) {
+    function findCostFunction(data) {
         let results = {};
 
         for (let i = 0; i < 1; i = i + 0.025) {
@@ -129,25 +117,85 @@ export default function GraphBuilder() {
         setCoeff(Math.round(results[minimum] * 1000) / 1000);
     }
 
+    function graduallyDescend(data) {
+        const learningRate = 0.000055;
+
+        let results = {};
+
+        const h = (param1, x) => {
+            return param1 * x;
+        };
+
+        let theta1 = 1.5;
+
+        for (const [x, y] of data) {
+            let temp = theta1 - learningRate * ((h(theta1, x) - y) * x);
+
+            if (temp > 0 && temp < 1) {
+                results[temp] = theta1;
+            }
+
+            // results[theta1] = temp;
+            
+            theta1 = temp;
+        }
+
+        const minimum = Math.min(...Object.keys(results));
+
+        console.log(results, minimum);
+        console.log(results);
+
+        setCoeff(results[minimum]);
+    }
+
+    function handleDataSetChange(dataString) {
+        const regExp = (/(\[\d*,\s?\d*\])/g);
+
+        const matches = dataString.matchAll(regExp);
+
+        let arr = [];
+
+        for (const match of matches) {
+            arr.push(match[0]);
+        }
+
+        console.log(arr);
+        //setData(arr);
+    }
+
+    function dataToString(data) {
+        let string = '';
+
+        for (const [x, y] of data) {
+            string += `[${x}, ${y}],`;
+        }
+
+        return string;
+    }
+
     return (
         <Grid container spacing={4}>
             <Grid item xs={4}>
-                <form className={classes.root} noValidate autoComplete="off">
-                    <TextField
-                        id="standard-textarea"
-                        label="coordinates"
-                        placeholder="Placeholder"
-                        multiline
-                        onChange={e => handleChange(e.target.value)}
-                        value={coordinates}
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                    />
-                </form>
+                <Box>
+                    <form className={classes.root} noValidate autoComplete="off">
+                        <TextField
+                            id="standard-textarea"
+                            label="data set"
+                            placeholder="Placeholder"
+                            multiline
+                            onChange={e => setDataString(e.target.value)}
+                            value={dataString}
+                            rows={3}
+                            fullWidth
+                            variant="outlined"
+                        />
+                    </form>
 
-                <Box my={2}>
-                    <Button variant="contained" color="primary" onClick={e => drawGraph(coordinates)}>Draw graph</Button>
+                    <Box my={2}>
+                        <Button variant="contained" color="primary" onClick={e => handleDataSetChange(dataString)}>
+                            Update date set
+                        </Button>
+                    </Box>
                 </Box>
 
                 <Box my={2}>
@@ -193,14 +241,18 @@ export default function GraphBuilder() {
                 </Box>
 
                 <Box my={2}>
-                    <Button variant="contained" color="primary" onClick={e => findConstFunction(dataPoints)}>Find cost function</Button>
+                    <Button variant="contained" color="primary" onClick={e => findCostFunction(data)}>Find cost function</Button>
+                </Box>
+
+                <Box my={2}>
+                    <Button variant="contained" color="primary" onClick={e => graduallyDescend(data)}>Gradually descent</Button>
                 </Box>
             </Grid>
 
             <Grid item xs={8}>
                 <Box height={graphH}>
                     <svg className={classes.svg} viewport="0 0 100 100">
-                        {drawDataPoints(dataPoints)}
+                        {drawDataPoints(data)}
 
                         <path className={`${classes.path} ${classes.line}`} d={`M 0 ${graphH} ${d}`}></path>
                     </svg>
