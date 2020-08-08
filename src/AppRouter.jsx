@@ -9,6 +9,7 @@ import TemporaryDrawer from "./AppLayout/Sidebar";
 
 import ArcBuilder from "./Features/ArcBuilder";
 import GraphBuilder from "./Features/GraphBuilder";
+import MvvmPlayground from "./Features/MvvmPlayground";
 
 export default function AppRouter() {
     return (
@@ -22,6 +23,10 @@ export default function AppRouter() {
 
                 <Route exact path="/graph-builder">
                     <GraphBuilder />
+                </Route>
+
+                <Route exact path="/mvvm-playground">
+                    <MvvmPlayground />
                 </Route>
             </Switch>
         </Router>

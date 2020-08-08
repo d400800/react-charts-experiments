@@ -16,7 +16,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Link from '@material-ui/core/Link';
 
-import { BrowserRouter as Router, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 const drawerWidth = 240;
@@ -145,6 +145,14 @@ export default function PersistentDrawerLeft() {
                         <ListItemText>
                             <Link component={RouterLink} to="/graph-builder">
                                 Graph Builder
+                            </Link>
+                        </ListItemText>
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemText>
+                            <Link component={RouterLink} to="/mvvm-playground">
+                                Mvvm Playground
                             </Link>
                         </ListItemText>
                     </ListItem>

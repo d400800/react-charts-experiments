@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +49,7 @@ export default function GraphBuilder() {
     const [coeff, setCoeff] = useState(1);
     const [param, setParam] = useState(0);
 
-    const [data, setData] = useState(dataSet);
+    const [data] = useState(dataSet);
 
     const [dataString, setDataString] = useState(() => dataToString(dataSet))
 
