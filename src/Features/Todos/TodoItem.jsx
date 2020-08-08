@@ -19,8 +19,9 @@ export const TodoItem = ({todo}) => {
     return (
         useObserver(() => (
             <>
+                <div>{JSON.stringify(todo)}</div>
                 {
-                    todo.viewData.isEditing ?
+                    todo.uiData.isEditing ?
                         <Box display="flex" alignItems="center">
                             <Box mr={2}>
                                 <TextField value={newText} variant="outlined" size="small" onKeyDown={onEnterPress(saveText)}

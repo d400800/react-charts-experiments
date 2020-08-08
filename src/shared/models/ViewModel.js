@@ -1,10 +1,9 @@
-import {extendObservable} from "mobx";
+import ObservableModel from "./ObservableModel";
 
+export default class ViewModel {
+    constructor({modelData, uiData} = {}) {
+        this.data = new ObservableModel(modelData);
 
-export default class ObservableModel {
-    constructor(data) {
-        extendObservable(
-            this,{...data}
-        )
+        this.uiData = new ObservableModel(uiData);
     }
 }

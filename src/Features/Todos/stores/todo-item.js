@@ -1,16 +1,26 @@
-import {action, observable, extendObservable, decorate } from "mobx";
-import ObservableModel from "../../../shared/models/ViewModel";
+import {action, decorate } from "mobx";
+import ObservableModel from "../../../shared/models/ObservableModel";
+import ViewModel from "../../../shared/models/ViewModel";
 
-export default class TodoItem {
-    constructor(data = {}) {
-        this.data = new ObservableModel(data);
+export default class TodoItem extends ViewModel{
+    constructor({modelData, uiData} = {}) {
+        super({
+            modelData,
+            uiData: {
+                ...TodoItem.getDefaultUiData(),
+                ...uiData
+            }
+        });
+    }
 
-        this.viewData =  new ObservableModel({isEditing: false});
+    static getDefaultUiData() {
+        return {
+            isEditing: false
+        }
     }
 
     toggleIsEditing = () => {
-        console.log(this);
-        this.viewData.isEditing = !this.viewData.isEditing;
+        this.uiData.isEditing = !this.uiData.isEditing;
     }
 
     toggleIsDone = () => {
@@ -25,7 +35,5 @@ export default class TodoItem {
 decorate(TodoItem, {
     toggleIsDone: action,
     toggleIsEditing: action,
-    updateText: action,
-    //data: observable,
-    //viewData: observable
+    updateText: action
 })
