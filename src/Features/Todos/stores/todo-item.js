@@ -1,5 +1,4 @@
 import {action, decorate } from "mobx";
-import ObservableModel from "../../../shared/models/ObservableModel";
 import ViewModel from "../../../shared/models/ViewModel";
 
 export default class TodoItem extends ViewModel{
