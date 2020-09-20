@@ -1,12 +1,12 @@
 import {action, decorate } from "mobx";
 import ViewModel from "../../../shared/models/ViewModel";
 
-export default class TodoItem extends ViewModel{
+export default class TodoItemVm extends ViewModel {
     constructor({modelData, uiData} = {}) {
         super({
             modelData,
             uiData: {
-                ...TodoItem.getDefaultUiData(),
+                ...TodoItemVm.getDefaultUiData(),
                 ...uiData
             }
         });
@@ -31,7 +31,7 @@ export default class TodoItem extends ViewModel{
     }
 }
 
-decorate(TodoItem, {
+decorate(TodoItemVm, {
     toggleIsDone: action,
     toggleIsEditing: action,
     updateText: action

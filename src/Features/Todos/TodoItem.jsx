@@ -6,17 +6,12 @@ import AdjustIcon from '@material-ui/icons/Adjust';
 import EditIcon from '@material-ui/icons/Edit';
 import {useObserver} from "mobx-react-lite";
 import {useTodoListStore} from './stores/todo-list';
+import TodoItemVm from "./stores/todo-item";
+import ViewModel from "../../shared/models/ViewModel";
+import useViewModel from "../../shared/hooks/use-view-model";
 
 export const TodoItem = ({todo}) => {
     const {StoreContext: todoList} = useTodoListStore();
-
-    const [newText, setText] = useState(todo.data.text);
-
-    const saveText = () => {
-        todo.updateText(newText);
-
-        todo.toggleIsEditing();
-    };
 
     return (
         useObserver(() => (
@@ -26,11 +21,9 @@ export const TodoItem = ({todo}) => {
                         ?
                         <Box display="flex" alignItems="center">
                             <Box mr={2}>
-                                <TextField value={newText} variant="outlined" size="small" onKeyDown={onEnterPress(saveText)}
-                                           onChange={e => setText(e.target.value)}/>
+                                <TodoText onSave={todo.update}
+                                          todoText={todo.data.text}/>
                             </Box>
-
-                            <Button variant="contained" color="primary" onClick={saveText}>save</Button>
                         </Box>
                         :
                         <Box display="flex" alignItems="center">
@@ -43,7 +36,7 @@ export const TodoItem = ({todo}) => {
 
                             <Typography variant="body1">{todo.data.text}</Typography>
 
-                            <IconButton onClick={() => todo.toggleIsEditing()}>
+                            <IconButton onClick={() => todo.updateUiData({isEditing: true})}>
                                 <EditIcon/>
                             </IconButton>
 
@@ -61,3 +54,25 @@ export const TodoItem = ({todo}) => {
         ))
     )
 };
+
+function TodoText({todoText, onSave}) {
+    const todoTextVm = useViewModel(new ViewModel({
+        modelData: {text: todoText}
+    }));
+
+    return (
+        useObserver(() => (
+            <>
+                <TextField value={todoTextVm.data.text} variant="outlined" size="small"
+                           onChange={e => todoTextVm.updateData({text: e.target.value})}
+                />
+
+                <Button variant="contained" color="primary"
+                        onClick={() => onSave({text: todoTextVm.data.text}, {isEditing: false})}
+                >
+                    save
+                </Button>
+            </>
+        ))
+    );
+}

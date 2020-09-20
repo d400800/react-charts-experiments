@@ -1,7 +1,7 @@
 import {createContext, useContext} from 'react';
 
 import {action, computed, observable, decorate} from "mobx";
-import TodoItem from "./todo-item";
+import TodoItemVm from "./todo-item";
 
 export default class TodoListStore {
     constructor(todos) {
@@ -14,7 +14,7 @@ export default class TodoListStore {
     }
 
     addTodo = (todo) => {
-        this.list.push(new TodoItem(todo));
+        this.list.push(new TodoItemVm(todo));
     }
 
     removeTodo = (todo) => {

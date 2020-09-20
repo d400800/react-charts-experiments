@@ -24,7 +24,6 @@ function TodoListPage() {
 
     return (
         <>
-
             <TestStoreProvider value={{test: 123}}>
                 <TodoListStoreProvider value={InitialTodoListStore}>
                     <TodoNew/>
