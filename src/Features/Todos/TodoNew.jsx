@@ -7,20 +7,9 @@ import ViewModel from "../../shared/models/ViewModel";
 import useViewModel from "../../shared/hooks/use-view-model";
 
 class TodoNewVm extends ViewModel {
-    constructor({modelData, uiData} = {}) {
-        // todo: refactor this repeating code
-        super({
-            modelData,
-            uiData: {
-                ...TodoNewVm.getDefaultUiData(),
-                ...uiData
-            }
-        });
-    }
-
     static getDefaultUiData() {
         return {
-            name: ''
+            name: 'test'
         }
     }
 }
@@ -31,7 +20,7 @@ export const TodoNew = () => {
 
     const addTodo = () => {
         todoList.addTodo({
-            modelData: {text: todoNewVm.uiData.name}
+            data: {text: todoNewVm.uiData.name}
         });
 
         todoNewVm.updateUiData({

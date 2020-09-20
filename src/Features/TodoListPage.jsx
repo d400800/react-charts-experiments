@@ -8,14 +8,14 @@ import {useTestStore} from "./Todos/stores/test";
 function TodoListPage() {
     const InitialTodoListStore = new TodoListStore([
         {
-            modelData: {text: 'Implement MVVM with mobx', id: 1, isDone: false},
+            data: {text: 'Implement MVVM with mobx', id: 1, isDone: false},
             uiData: {isEditing: false}
         },
         {
-            modelData: {text: 'Buy milk', id: 2, isDone: false}
+            data: {text: 'Buy milk', id: 2, isDone: false}
         },
         {
-            modelData: {text: 'Workout', id: 3, isDone: false}
+            data: {text: 'Workout', id: 3, isDone: false}
         }
     ]);
 

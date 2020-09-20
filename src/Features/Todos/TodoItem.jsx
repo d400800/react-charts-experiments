@@ -1,12 +1,10 @@
-import React, {useState} from 'react';
-import {onEnterPress} from "./helpers/use-enter";
+import React from 'react';
 import {Button, Box, Typography, Checkbox, IconButton, TextField} from "@material-ui/core";
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import AdjustIcon from '@material-ui/icons/Adjust';
 import EditIcon from '@material-ui/icons/Edit';
 import {useObserver} from "mobx-react-lite";
 import {useTodoListStore} from './stores/todo-list';
-import TodoItemVm from "./stores/todo-item";
 import ViewModel from "../../shared/models/ViewModel";
 import useViewModel from "../../shared/hooks/use-view-model";
 
@@ -57,7 +55,7 @@ export const TodoItem = ({todo}) => {
 
 function TodoText({todoText, onSave}) {
     const todoTextVm = useViewModel(new ViewModel({
-        modelData: {text: todoText}
+        data: {text: todoText}
     }));
 
     return (

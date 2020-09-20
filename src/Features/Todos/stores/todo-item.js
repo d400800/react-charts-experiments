@@ -2,16 +2,6 @@ import {action, decorate } from "mobx";
 import ViewModel from "../../../shared/models/ViewModel";
 
 export default class TodoItemVm extends ViewModel {
-    constructor({modelData, uiData} = {}) {
-        super({
-            modelData,
-            uiData: {
-                ...TodoItemVm.getDefaultUiData(),
-                ...uiData
-            }
-        });
-    }
-
     static getDefaultUiData() {
         return {
             isEditing: false

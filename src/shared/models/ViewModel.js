@@ -1,10 +1,13 @@
 import ObservableModel from "./ObservableModel";
 
 export default class ViewModel {
-    constructor({modelData, uiData} = {}) {
-        this.data = new ObservableModel(modelData);
+    constructor({data, uiData} = {}) {
+        this.data = new ObservableModel(data);
 
-        this.uiData = new ObservableModel(uiData);
+        this.uiData = new ObservableModel({
+            ...this.constructor.getDefaultUiData(),
+            ...uiData
+        });
     }
 
     updateUiData = (uiData) => {
@@ -22,5 +25,9 @@ export default class ViewModel {
     update = (data, uiData) => {
         this.updateData(data);
         this.updateUiData(uiData)
+    }
+
+    static getDefaultUiData() {
+        return {};
     }
 }
